@@ -48,7 +48,8 @@ test_rec = { "name": "Testing Recipe",
 }
 
 meats = []
-poultry = []
+poultrys = []
+vegetables = []
 
 def load_lists():
 	meat_file = open("meats.txt", "r")
@@ -56,6 +57,18 @@ def load_lists():
 	for meat in meat_lines:
 		curr = meat.rstrip('\n')
 		meats.append(str(curr.lower()))
+
+	poultry_file = open("poultry.txt", "r")
+	poultry_lines = poultry_file.readlines()
+	for poultry in poultry_lines:
+		curr = poultry.rstrip('\n')
+		poultrys.append(str(curr.lower()))
+
+	vegetable_file = open("vegetables.txt", "r")
+	veg_lines = vegetable_file.readlines()
+	for veg in veg_lines:
+		curr = veg.rstrip('\n')
+		vegetables.append(str(curr.lower()))
 
 #print test_rec
 
@@ -65,7 +78,6 @@ def remove_meat(recipe):
 
 load_lists()
 remove_meat(test_rec)
-print meats
 
 
 
