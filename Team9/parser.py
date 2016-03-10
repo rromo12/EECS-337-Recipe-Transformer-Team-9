@@ -27,15 +27,12 @@ def parser(url):
 	all_ingredients = soup.find_all(class_ = "recipe-ingred_txt", itemprop="ingredients")
 	for single_ingredient in all_ingredients:
 		text = single_ingredient.get_text()
-<<<<<<< HEAD
-		#split text into unigrams
 
 
 		# use regexp to splut into name,quantity, measurement,descriptor,preparation(if any), prep-description(optional/if any)
 		# quantity  = regexp "(-?[0-9]+\s?([0-9]+)?[/.]?([0-9]+)?)" or A(n), dozen, 
-=======
+
 		#TODO Get Ingredient Name
->>>>>>> refs/remotes/origin/master
 		name =""
 		# TODO Get Quantity # quantity  = regexp "-?[0-9]+[/.]?([0-9]+)?" or A(n), dozen, 
 		quantity=""
@@ -65,17 +62,14 @@ def parser(url):
 	 primaryCookingMethod = ""
 	 cookingMethods = [""]
 
-<<<<<<< HEAD
 	 #TODO Cooking Tools
 	 cookingTools = [""]
-=======
 	#TODO Get Tools 
 	tools =[""]
 	#TODO Get Methods
 	primaryMethod = ""
 	methods = [""]
 
->>>>>>> refs/remotes/origin/master
 	# Steps class "step" -> class "recipe=directions__list--item"
 	allsteps = soup.find_all(class_="recipe-directions__list--item")
 	for step in allsteps:
@@ -103,19 +97,12 @@ def parser(url):
 
 	return {"name": name,
 			"ingredients": ingredients,
-<<<<<<< HEAD
 			"primary cooking method": ,
 			"cooking methods":,
 			"cooking tools": ,
-=======
 			"primary cooking method": primaryMethod,
 			"cooking methods": methods,
 			"cooking tools": tools,
-<<<<<<< HEAD
-
->>>>>>> refs/remotes/origin/master
-=======
->>>>>>> refs/remotes/origin/master
 			"steps":steps
 			}
 
