@@ -12,8 +12,7 @@ import nltk
 
 
 def parser(url):
-	"""Take url and parse into db"""
-
+	"""Take url and parse into proper format"""
 	r  = requests.get(url)
 	data = r.text
 	soup = BeautifulSoup(data,"html.parser")
@@ -28,19 +27,25 @@ def parser(url):
 	all_ingredients = soup.find_all(class_ = "recipe-ingred_txt", itemprop="ingredients")
 	for single_ingredient in all_ingredients:
 		text = single_ingredient.get_text()
+<<<<<<< HEAD
 		#split text into unigrams
 
 
 		# use regexp to splut into name,quantity, measurement,descriptor,preparation(if any), prep-description(optional/if any)
 		# quantity  = regexp "(-?[0-9]+\s?([0-9]+)?[/.]?([0-9]+)?)" or A(n), dozen, 
+=======
+		#TODO Get Ingredient Name
+>>>>>>> refs/remotes/origin/master
 		name =""
+		# TODO Get Quantity # quantity  = regexp "-?[0-9]+[/.]?([0-9]+)?" or A(n), dozen, 
 		quantity=""
+		#TODO Get Measurement
 		measurement= "" #check vs hardcoded list of units
 		
-		# Optional
+		#TODO Optional Parsing
 		descriptor = ""
 		preparation = ""
-		prep-description = ""
+		prep_description = ""
 
 		ingredient = {
 		"name": name,
@@ -48,7 +53,7 @@ def parser(url):
 		"measurement": measurement,
 		"descriptor": descriptor,
 		"preparation": preparation,
-		"prep-description": prep-description
+		"prep-description": prep_description
 		}
 		ingredients.append(ingredient)
 	
@@ -60,23 +65,53 @@ def parser(url):
 	 primaryCookingMethod = ""
 	 cookingMethods = [""]
 
+<<<<<<< HEAD
 	 #TODO Cooking Tools
 	 cookingTools = [""]
+=======
+	#TODO Get Tools 
+	tools =[""]
+	#TODO Get Methods
+	primaryMethod = ""
+	methods = [""]
+
+>>>>>>> refs/remotes/origin/master
 	# Steps class "step" -> class "recipe=directions__list--item"
 	allsteps = soup.find_all(class_="recipe-directions__list--item")
 	for step in allsteps:
-		steps.append(step.get_text())
+		step_text = step.get_text()
+		# TODO Parse ingredients from step into list
+		step_ingredients = [""]
+		# TODO Parse Tools
+		step_tools = [""]
+		# TODO Parse Methods
+		step_methods = [""]
+		# TODO Parse Times 
+		step_times = [""]
 
-	# print name
-	# for ingredient in ingredients:
-	# 	print ingredient
-	# for step in steps:
-	# 	print step
+
+		stepdict = {
+			"text": step_text,
+			"ingredients": step_ingredients,
+			"tools": step_tools,
+			"methods":step_methods,
+			"times": step_times
+		}
+		steps.append(stepdict)
+
+
 	return {"name": name,
 			"ingredients": ingredients,
+<<<<<<< HEAD
 			"primary cooking method": ,
 			"cooking methods":,
 			"cooking tools": ,
+=======
+			"primary cooking method": primaryMethod,
+			"cooking methods": methods,
+			"cooking tools": tools,
+
+>>>>>>> refs/remotes/origin/master
 			"steps":steps
 			}
 
