@@ -54,7 +54,8 @@ def load_lists():
 	meat_file = open("meats.txt", "r")
 	meat_lines = meat_file.readlines()
 	for meat in meat_lines:
-		print meat
+		curr = meat.rstrip('\n')
+		meats.append(str(curr.lower()))
 
 #print test_rec
 
@@ -64,6 +65,7 @@ def remove_meat(recipe):
 
 load_lists()
 remove_meat(test_rec)
+print meats
 
 
 
