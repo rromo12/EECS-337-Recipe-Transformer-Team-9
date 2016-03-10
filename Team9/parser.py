@@ -32,7 +32,7 @@ def parser(url):
 
 
 		# use regexp to splut into name,quantity, measurement,descriptor,preparation(if any), prep-description(optional/if any)
-		# quantity  = regexp "-?[0-9]+[/.]?([0-9]+)?" or A(n), dozen, 
+		# quantity  = regexp "(-?[0-9]+\s?([0-9]+)?[/.]?([0-9]+)?)" or A(n), dozen, 
 		name =""
 		quantity=""
 		measurement= "" #check vs hardcoded list of units
@@ -51,9 +51,17 @@ def parser(url):
 		"prep-description": prep-description
 		}
 		ingredients.append(ingredient)
-	# for ingredient in ingredients:
-	# 	print ingredient
+	
+	if(debug):
+	 for ingredient in ingredients:
+	 	print ingredient
 
+	 # TODO Cooking Methods (Primary and additional)
+	 primaryCookingMethod = ""
+	 cookingMethods = [""]
+
+	 #TODO Cooking Tools
+	 cookingTools = [""]
 	# Steps class "step" -> class "recipe=directions__list--item"
 	allsteps = soup.find_all(class_="recipe-directions__list--item")
 	for step in allsteps:
@@ -66,7 +74,11 @@ def parser(url):
 	# 	print step
 	return {"name": name,
 			"ingredients": ingredients,
-			"steps":steps}
+			"primary cooking method": ,
+			"cooking methods":,
+			"cooking tools": ,
+			"steps":steps
+			}
 
 if __name__ == '__main__':
 	# url = raw_input("Enter a URL of the Recipe: ")
