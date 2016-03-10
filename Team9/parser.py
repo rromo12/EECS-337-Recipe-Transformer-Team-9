@@ -73,6 +73,7 @@ def parser(url):
 
 		stepdict = {
 			"text": step_text,
+			#Optional
 			"ingredients": step_ingredients,
 			"tools": step_tools,
 			"methods":step_methods,
@@ -86,7 +87,6 @@ def parser(url):
 			"primary cooking method": primaryMethod,
 			"cooking methods": methods,
 			"cooking tools": tools,
-
 			"steps":steps
 			}
 
@@ -101,4 +101,43 @@ if __name__ == '__main__':
 	# http://allrecipes.com/recipe/213742/meatball-nirvana/
 	print parser(url)
 
-	
+# #Sample Recipe Representation 
+# { "name": "Recipe Name",
+#   "ingredients": [  
+#   		{
+#   		"name": ingredient1,
+# 		"quantity": quantity,
+# 		"measurement": measurement,
+# 		"descriptor": descriptor,
+# 		"preparation": preparation,
+# 		"prep-description": prep_description
+# 		},
+# 		{
+# 		"name": ingredient2,
+# 		"quantity": quantity,
+# 		"measurement": measurement,
+# 		"descriptor": descriptor,
+# 		"preparation": preparation,
+# 		"prep-description": prep_description
+# 		}],
+# 	"primary cooking method": "Recipe Primary Cooking Method",
+# 	"cooking methods": ["method1","method2","method3"],
+# 	"cooking tools": ["tool1","tool2","tool3"],
+# 	"steps": [
+# 		{
+# 			"text": step1_text,
+# 			#Optional
+# 			"ingredients": ["ingredient1"],
+# 			"tools": ["tool1","tool2","tool3"],
+# 			"methods"["method1","method2","method3"],
+# 			"times": step_times
+# 		},
+# 		{
+# 			"text": step2_text,
+# 			#Optional
+# 			"ingredients": ["ingredient2"],
+# 			"tools": ["tool1","tool2","tool3"],
+# 			"methods":["method1","method2","method3"],
+# 			"times": step_times
+# 		}]
+# }
