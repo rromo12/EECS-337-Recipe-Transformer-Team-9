@@ -6,7 +6,8 @@ import nltk
 #given a recipe dictionary of lists of dictionaries / lists -> transform to new object of same format
 
 # #Sample Recipe Representation 
-{ "name": "Testing Recipe",
+
+test_rec = { "name": "Testing Recipe",
   "ingredients": [  
   		{
   		"name": "bear",
@@ -45,4 +46,24 @@ import nltk
 			"times": 600.0
 		}]
 }
+
+meats = []
+poultry = []
+
+def load_lists():
+	meat_file = open("meats.txt", "r")
+	meat_lines = meat_file.readlines()
+	for meat in meat_lines:
+		print meat
+
+#print test_rec
+
+def remove_meat(recipe):
+	for single_ingredient in recipe['ingredients']:
+		print single_ingredient['name']
+
+load_lists()
+remove_meat(test_rec)
+
+
 
