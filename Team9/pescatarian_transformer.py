@@ -80,6 +80,23 @@ def remove_fish(recipe):
                 step["text"] = step["text"].replace(fish, replacement[fish])
     return recipe
 
+def add_fish(recipe):
+    fish_list = open("fish.txt").readlines()
+    meat_list = open("meats.txt").readlines()
+    found_meat = []
+    replacement = {}
+	for single_ingredient in recipe['ingredients']:
+        if single_ingredient["name"] in meat_list
+            fish_replacement = random.choice(fish_list) # TODO: we can be smarter than random
+            single_ingredient["name"] = fish_replacement
+            found_meat.append(single_ingredient["name"])
+            replacement[single_ingredient["name"]] = fish_replacement
+    for meat in found_meat:
+        for step in recipe["steps"]:
+            if meat in step["text"]:
+                step["text"] = step["text"].replace(meat, replacement[meat])
+    return recipe
+
 load_lists()
 remove_meat(test_rec)
 
