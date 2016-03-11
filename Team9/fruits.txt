@@ -1,0 +1,128 @@
+Acai Berries
+Apple, Granny Smith
+Apple, Red
+Apple, Yellow
+Apples
+Apple
+Granny Smith Apple
+Red Apple
+Yellow Apple
+Apricot
+Bananas
+Berries
+Blackberries
+Blueberries
+Boysenberries
+Breadfruit
+Carissa
+Natal Plum
+Cherimoya
+Cherries
+Cloudberries
+Coconut
+Cranberries
+Currents, Black
+Currents, Red
+Black Currents
+Red Currents
+Dates
+Dewberries
+Durian
+Elderberries
+Feijoa
+Figs
+Gogi
+Wolfberry
+Gooseberries
+Grapefruit
+Grapes
+Groundcherries
+Cape Gooseberries
+Poha
+Guava
+Huckleberries
+Jack Fruit
+Java-plum
+Jambolan
+Jujube
+Kiwi
+Kumquat
+Lemon
+Lime
+Lingonberries
+Loganberries
+Loquat
+Mango
+Mangosteen
+Melon
+Melon, Bitter
+Melon, Canang
+Melon, Cantaloupe
+Melon, Casaba
+Melon, Cassava
+Melon, Christmas
+Melon, Crenshaw
+Melon, Honeydew
+Melon, Juan Canary
+Melon, Musk
+Melon, Orange-flesh Honeydew
+Melon, Pepino
+Melon, Persian
+Melon, Santa Claus
+Melon, Spanish
+Yellow-flesh Watermelon
+Bitter Melon
+Canang Melon
+Cantaloupe Melon
+Casaba Melon
+Cassava Melon
+Christmas Melon
+Honeydew Melon
+Juan Canary Melon
+Musk Melon
+Orange-flesh Honeydew Melon
+Pepino Melon
+Persian Melon
+Santa Claus Melon
+Spanish Melon
+Mulberries
+Nectarine
+Noni
+Orange, Blood
+Orange, Mandarin
+Orange, Navel
+Oranges
+Organge
+Blood Orange
+Mandarin Orange
+Navel Orange
+Papaya
+Passion Fruit
+Paw Paw
+Peach
+Pear
+Pear, Asian
+Asian Pear
+Persimmon
+Pineapple
+Plantain
+Plums
+Pomegranate
+Prickly Pear
+Prunes
+Pummelo
+Quince
+Raisins
+Raspberries
+Rhubarb
+Rowanberries
+Sago Palm
+Star fruit
+Carambola
+Strawberries
+Tamarillo
+Tangelo
+Tangerine
+Tayberry
+Watermelon
+Youngberries

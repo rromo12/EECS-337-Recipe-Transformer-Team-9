@@ -52,6 +52,7 @@ meats = []
 poultrys = []
 vegetables = []
 fishes = []
+fruits = []
 
 def load_lists():
 	meat_file = open("meats.txt", "r")
@@ -76,6 +77,11 @@ def load_lists():
 	for pheesh in fish_list:
 		curr = pheesh.rstrip('\n')
 		fishes.append(str(curr.lower()))
+
+	fruit_list = open("fruits.txt").readlines()
+	for fruit in fruit_list:
+		curr = pheesh.rstrip('\n')
+		fruits.append(str(curr.lower()))
 
 
 #print test_rec
@@ -139,12 +145,47 @@ def add_fish(recipe):
 		for step in recipe["steps"]:
 			if meat in step["text"]:
 				step["text"] = step["text"].replace(meat, replacement[meat])
-	#print found_meat
-	#print replacement
 	return recipe
 
+def to_Mediterranean(recipe):
+	new_rec = add_fish(recipe)
+	found_veg = []
+	replacement = {}
+	for single_ingredient in new_rec['ingredients']:
+		if single_ingredient["name"] in vegetables:
+			veg_replacement = random.choice(fruits) # TODO: we can be smarter than random
+			found_veg.append(single_ingredient["name"])
+			replacement[single_ingredient["name"]] = veg_replacement
+			single_ingredient["name"] = veg_replacement
+	for veg in found_veg:
+		for step in new_rec["steps"]:
+			if veg in step["text"]:
+				step["text"] = step["text"].replace(veg, replacement[veg])
+	new_rec['steps'].append({
+			"text": "drizzle olive oil over finished product, serve with feta cheese on the side",
+			#Optional
+			"ingredients": ['olive oil', 'feta cheese'],
+			"tools": [],
+			"methods": ["drizzle"],
+			"times": 1.0
+		})
+
+	return new_rec
+
+#nicely displays in terminal output
+def displayRecipe(recipe):
+	print "Name: " + recipe['name']
+	print "Ingredients: "
+	for single_ingredient in recipe['ingredients']:
+		print '--------'
+		print single_ingredient['name']
+		print str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
+		print single_ingredient['descriptor']
+		print single_ingredient['preparation'] + 'prep-description: ' + single_ingredient['prep-description']
+	print "Primary Cooking Method: "
+
 load_lists()
-print add_meat(remove_meat(test_rec))
+displayRecipe(to_Mediterranean(test_rec))
 
 
 
