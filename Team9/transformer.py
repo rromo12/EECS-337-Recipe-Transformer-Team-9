@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import sys
 import nltk
+import random
 
 #given a recipe dictionary of lists of dictionaries / lists -> transform to new object of same format
 
@@ -50,6 +51,7 @@ test_rec = { "name": "Testing Recipe",
 meats = []
 poultrys = []
 vegetables = []
+fishes = []
 
 def load_lists():
 	meat_file = open("meats.txt", "r")
@@ -70,14 +72,53 @@ def load_lists():
 		curr = veg.rstrip('\n')
 		vegetables.append(str(curr.lower()))
 
+	fish_list = open("fish.txt").readlines()
+	for pheesh in fish_list:
+		curr = pheesh.rstrip('\n')
+		fishes.append(str(curr.lower()))
+
+
 #print test_rec
 
 def remove_meat(recipe):
 	for single_ingredient in recipe['ingredients']:
 		print single_ingredient['name']
 
+def remove_fish(recipe):
+	found_fish = []
+	replacement = {}
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient["name"] in fishes:
+			meat_replacement = random.choice(meats) # TODO: we can be smarter than random
+			found_fish.append(single_ingredient["name"])
+			replacement[single_ingredient["name"]] = meat_replacement
+			single_ingredient["name"] = meat_replacement
+	for fish in found_fish:
+		for step in recipe["steps"]:
+			if fish in step["text"]:
+				step["text"] = step["text"].replace(fish, replacement[fish])
+	return recipe
+
+def add_fish(recipe):
+	found_meat = []
+	replacement = {}
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient["name"] in meats:
+			fish_replacement = random.choice(fishes) # TODO: we can be smarter than random
+			found_meat.append(single_ingredient["name"])
+			replacement[single_ingredient["name"]] = fish_replacement
+			single_ingredient["name"] = fish_replacement
+	for meat in found_meat:
+		for step in recipe["steps"]:
+			if meat in step["text"]:
+				step["text"] = step["text"].replace(meat, replacement[meat])
+	#print found_meat
+	#print replacement
+	return recipe
+
 load_lists()
-remove_meat(test_rec)
+wit_fish = add_fish(test_rec)
+print remove_fish(wit_fish)
 
 
 
