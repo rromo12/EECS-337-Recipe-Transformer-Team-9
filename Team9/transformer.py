@@ -81,8 +81,35 @@ def load_lists():
 #print test_rec
 
 def remove_meat(recipe):
+	found_meat = []
+	replacement = {}
 	for single_ingredient in recipe['ingredients']:
-		print single_ingredient['name']
+		if single_ingredient["name"] in meats:
+			meat_replacement = random.choice(vegetables) # TODO: we can be smarter than random
+			found_meat.append(single_ingredient["name"])
+			replacement[single_ingredient["name"]] = meat_replacement
+			single_ingredient["name"] = meat_replacement
+	for meat in found_meat:
+		for step in recipe["steps"]:
+			if meat in step["text"]:
+				step["text"] = step["text"].replace(meat, replacement[meat])
+	return recipe
+
+def add_meat(recipe):
+	found_veg = []
+	replacement = {}
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient["name"] in vegetables:
+			veg_replacement = random.choice(meats) # TODO: we can be smarter than random
+			found_veg.append(single_ingredient["name"])
+			replacement[single_ingredient["name"]] = veg_replacement
+			single_ingredient["name"] = veg_replacement
+	for veg in found_veg:
+		for step in recipe["steps"]:
+			if veg in step["text"]:
+				step["text"] = step["text"].replace(veg, replacement[veg])
+	return recipe
+
 
 def remove_fish(recipe):
 	found_fish = []
@@ -117,8 +144,7 @@ def add_fish(recipe):
 	return recipe
 
 load_lists()
-wit_fish = add_fish(test_rec)
-print remove_fish(wit_fish)
+print add_meat(remove_meat(test_rec))
 
 
 
