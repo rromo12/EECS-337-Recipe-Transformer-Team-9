@@ -1,14 +1,13 @@
 
 from bs4 import BeautifulSoup
 import requests
-import sys
 import nltk
+import sys
+import re
+from fractions import Fraction
+# Import units list
+from units import *
 
-
-
-
-#For Testing
-# http://allrecipes.com/recipe/16066
 
 
 def parser(url):
@@ -22,48 +21,53 @@ def parser(url):
 	name = soup.find_all(class_="recipe-summary__h1")
 	name = name[0].get_text()
 	
-
+	
 	# Ingredients under class recipe-ingred_txt added
 	all_ingredients = soup.find_all(class_ = "recipe-ingred_txt", itemprop="ingredients")
 	for single_ingredient in all_ingredients:
-		text = single_ingredient.get_text()
-
-
-		# use regexp to splut into name,quantity, measurement,descriptor,preparation(if any), prep-description(optional/if any)
-		# quantity  = regexp "(-?[0-9]+\s?([0-9]+)?[/.]?([0-9]+)?)" or A(n), dozen, 
+		text =  single_ingredient.get_text()
+		tokens= nltk.word_tokenize(text)
 
 		#TODO Get Ingredient Name
-		name =""
-		# TODO Get Quantity # quantity  = regexp "-?[0-9]+[/.]?([0-9]+)?" or A(n), dozen, 
-		quantity=""
-		#TODO Get Measurement
-		measurement= "" #check vs hardcoded list of units
+		ingredientname =""
+		# TODO maybe handle weird cases such as 2 (8 ounce) cans
+		quantity= re.search("(-?([0-9]+)\s?(([./0-9]+)?))",text)
+		quantity = quantity.group(0)
+		quantity = float(sum(Fraction(s) for s in quantity.split()))
+
 		
-		#TODO Optional Parsing
+		#Get Measurement
+		measurement = None
+		for token in tokens:
+			if(token.lower() in unitslist):
+				measurement= token.lower() #check vs hardcoded list of units
+		#go from abbreviations to full name
+		measurement = abbrToFull(measurement);
+		#TODO Optional Parsings
 		descriptor = ""
 		preparation = ""
 		prep_description = ""
 
 		ingredient = {
-		"name": name,
+		# "name": ingredientname,
+		"name": text,
 		"quantity": quantity,
 		"measurement": measurement,
-		"descriptor": descriptor,
-		"preparation": preparation,
-		"prep-description": prep_description
+		# "descriptor": descriptor,
+		# "preparation": preparation,
+		# "prep-description": prep_description
 		}
 		ingredients.append(ingredient)
-	
-	if(debug):
-	 for ingredient in ingredients:
+
+	for ingredient in ingredients:
 	 	print ingredient
 
-	 # TODO Cooking Methods (Primary and additional)
-	 primaryCookingMethod = ""
-	 cookingMethods = [""]
+	# TODO Cooking Methods (Primary and additional)
+	primaryCookingMethod = ""
+	cookingMethods = [""]
 
-	 #TODO Cooking Tools
-	 cookingTools = [""]
+	#TODO Cooking Tools
+	cookingTools = [""]
 	#TODO Get Tools 
 	tools =[""]
 	#TODO Get Methods
@@ -97,9 +101,6 @@ def parser(url):
 
 	return {"name": name,
 			"ingredients": ingredients,
-			"primary cooking method": ,
-			"cooking methods":,
-			"cooking tools": ,
 			"primary cooking method": primaryMethod,
 			"cooking methods": methods,
 			"cooking tools": tools,
@@ -108,14 +109,14 @@ def parser(url):
 
 if __name__ == '__main__':
 	# url = raw_input("Enter a URL of the Recipe: ")
-	url ="http://allrecipes.com/recipe/16066"
+	# url ="http://allrecipes.com/recipe/16066"
 
 	###AutoGrader Recipes
-	# http://allrecipes.com/recipe/easy-meatloaf/
-	# http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/
+	# url  = "http://allrecipes.com/recipe/easy-meatloaf/"
+	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
 	# http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/
 	# http://allrecipes.com/recipe/213742/meatball-nirvana/
-	print parser(url)
+	parser(url)
 
 # #Sample Recipe Representation 
 # { "name": "Recipe Name",
