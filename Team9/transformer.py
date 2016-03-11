@@ -174,15 +174,36 @@ def to_Mediterranean(recipe):
 
 #nicely displays in terminal output
 def displayRecipe(recipe):
+	print '____________________________________________________________________________'
 	print "Name: " + recipe['name']
 	print "Ingredients: "
 	for single_ingredient in recipe['ingredients']:
-		print '--------'
 		print single_ingredient['name']
 		print str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
 		print single_ingredient['descriptor']
-		print single_ingredient['preparation'] + 'prep-description: ' + single_ingredient['prep-description']
-	print "Primary Cooking Method: "
+		print single_ingredient['preparation'] + ' prep-description: ' + single_ingredient['prep-description']
+	print "Primary Cooking Method: " + recipe['primary cooking method']
+	print "Cooking Methods: "
+	for single_method in recipe['cooking methods']:
+		print single_method
+	print "Cooking Tools: "
+	for single_tool in recipe['cooking tools']:
+		print single_tool
+	print "Steps: "
+	for single_step in recipe['steps']:
+		print single_step['text']
+		print 'Ingredients: '
+		for single_ingredient in single_step['ingredients']:
+			print single_ingredient
+		print 'Tools: '
+		for single_tool in single_step['tools']:
+			print single_tool
+		print 'Methods: '
+		for single_method in single_step['methods']:
+			print single_method
+		print 'Time: ' + str(single_step['times'])
+		print ''
+
 
 load_lists()
 displayRecipe(to_Mediterranean(test_rec))
