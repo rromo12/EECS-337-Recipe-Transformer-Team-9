@@ -25,6 +25,14 @@ test_rec = { "name": "Testing Recipe",
 		"descriptor": "descriptor",
 		"preparation": "minced",
 		"prep-description": "coarsely"
+		},
+		{
+  		"name": "muenster cheese",
+		"quantity": 0.25,
+		"measurement": "pounds",
+		"descriptor": "descriptor",
+		"preparation": "chopped",
+		"prep-description": "finely"
 		}],
 	"primary cooking method": "fry",
 	"cooking methods": ["fry","stir", "spread"],
@@ -37,6 +45,14 @@ test_rec = { "name": "Testing Recipe",
 			"tools": ["pot","spatula"],
 			"methods": ["stir","spread"],
 			"times": 5.0
+		},
+		{
+			"text": "add muenster cheese to mixture and stir in",
+			#Optional
+			"ingredients": ["muenster cheese"],
+			"tools": ["pot"],
+			"methods": ["stir"],
+			"times": 2.0
 		},
 		{
 			"text": "fry mixture in pot for 10 hours",
@@ -54,6 +70,7 @@ vegetables = []
 fishes = []
 fruits = []
 breads = []
+cheeses = []
 
 #load txt files into python list objects
 def load_lists():
@@ -89,6 +106,11 @@ def load_lists():
 	for bread in bread_list:
 		curr = bread.rstrip('\n')
 		breads.append(str(curr.lower()))
+
+	dairy_list = open("cheeses.txt", 'r').readlines()
+	for dairy in dairy_list:
+		curr = dairy.rstrip('\n')
+		cheeses.append(str(curr.lower()))
 
 #replaces all vegetables with meat
 def remove_meat(recipe):
@@ -165,7 +187,7 @@ def to_Mediterranean(recipe):
 	pitacount = 0
 	bread_replacement = 'pita bread' 
 	#add ingredients we know for sure we will ba dding
-	new_rec['ingredients'].append({
+	new_rec['ingredients'].append({ #add in logic for if recipe already had feta, hummus, olive oil
   		"name": "olive oil",
 		"quantity": 0.25,
 		"measurement": "teaspoons",
@@ -229,6 +251,25 @@ def to_Mediterranean(recipe):
 
 	return new_rec
 
+#transforms recipe to american cuisine
+#version 1.0 -> add meat, replace all cheeses with american cheese
+def to_American(recipe):
+	new_rec = add_meat(recipe)
+	found_cheese = []
+	replacement = {}
+	cheese_replacement = 'american cheese'
+	for single_ingredient in new_rec['ingredients']:
+		if single_ingredient["name"] in cheeses:
+			found_cheese.append(single_ingredient["name"])
+			replacement[single_ingredient["name"]] = cheese_replacement
+			single_ingredient["name"] = cheese_replacement
+	for cheese in found_cheese:
+		for step in new_rec["steps"]:
+			if cheese in step["text"]:
+				step["text"] = step["text"].replace(cheese, replacement[cheese])
+
+	return new_rec
+
 #nicely displays in terminal output
 def displayRecipe(recipe):
 	print '____________________________________________________________________________'
@@ -249,21 +290,21 @@ def displayRecipe(recipe):
 	print "Steps: "
 	for single_step in recipe['steps']:
 		print single_step['text']
-		print 'Ingredients: '
-		for single_ingredient in single_step['ingredients']:
-			print single_ingredient
-		print 'Tools: '
-		for single_tool in single_step['tools']:
-			print single_tool
-		print 'Methods: '
-		for single_method in single_step['methods']:
-			print single_method
-		print 'Time: ' + str(single_step['times'])
-		print ''
+		#print 'Ingredients: '
+		#for single_ingredient in single_step['ingredients']:
+		#	print single_ingredient
+		#print 'Tools: '
+		#for single_tool in single_step['tools']:
+		#	print single_tool
+		#print 'Methods: '
+		#for single_method in single_step['methods']:
+		#	print single_method
+		#print 'Time: ' + str(single_step['times'])
+		#print ''
 
 
 load_lists()
-displayRecipe(to_Mediterranean(test_rec))
+displayRecipe(to_American(test_rec))
 
 
 
