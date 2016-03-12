@@ -11,7 +11,7 @@ import random
 test_rec = { "name": "Testing Recipe",
   "ingredients": [  
   		{
-  		"name": "bear",
+  		"name": "corn bread",
 		"quantity": 0.25,
 		"measurement": "pounds",
 		"descriptor": "descriptor",
@@ -31,9 +31,9 @@ test_rec = { "name": "Testing Recipe",
 	"cooking tools": ["pan","pot","spatula"],
 	"steps": [
 		{
-			"text": "place bear and beef in pot and spread along sides with spatula",
+			"text": "place corn bread and beef in pot and spread along sides with spatula",
 			#Optional
-			"ingredients": ["bear", "beef"],
+			"ingredients": ["corn bread", "beef"],
 			"tools": ["pot","spatula"],
 			"methods": ["stir","spread"],
 			"times": 5.0
@@ -41,7 +41,7 @@ test_rec = { "name": "Testing Recipe",
 		{
 			"text": "fry mixture in pot for 10 hours",
 			#Optional
-			"ingredients": ["bear", "beef"],
+			"ingredients": ["corn bread", "beef"],
 			"tools": ["pot"],
 			"methods": ["fry"],
 			"times": 600.0
@@ -53,7 +53,9 @@ poultrys = []
 vegetables = []
 fishes = []
 fruits = []
+breads = []
 
+#load txt files into python list objects
 def load_lists():
 	meat_file = open("meats.txt", "r")
 	meat_lines = meat_file.readlines()
@@ -73,19 +75,22 @@ def load_lists():
 		curr = veg.rstrip('\n')
 		vegetables.append(str(curr.lower()))
 
-	fish_list = open("fish.txt").readlines()
+	fish_list = open("fish.txt", 'r').readlines()
 	for pheesh in fish_list:
 		curr = pheesh.rstrip('\n')
 		fishes.append(str(curr.lower()))
 
-	fruit_list = open("fruits.txt").readlines()
+	fruit_list = open("fruits.txt", 'r').readlines()
 	for fruit in fruit_list:
-		curr = pheesh.rstrip('\n')
+		curr = fruit.rstrip('\n')
 		fruits.append(str(curr.lower()))
 
+	bread_list = open("breads.txt", 'r').readlines()
+	for bread in bread_list:
+		curr = bread.rstrip('\n')
+		breads.append(str(curr.lower()))
 
-#print test_rec
-
+#replaces all vegetables with meat
 def remove_meat(recipe):
 	found_meat = []
 	replacement = {}
@@ -101,6 +106,7 @@ def remove_meat(recipe):
 				step["text"] = step["text"].replace(meat, replacement[meat])
 	return recipe
 
+#replaces all meats with vegetables
 def add_meat(recipe):
 	found_veg = []
 	replacement = {}
@@ -117,6 +123,7 @@ def add_meat(recipe):
 	return recipe
 
 
+#replaces all fish with meat
 def remove_fish(recipe):
 	found_fish = []
 	replacement = {}
@@ -132,6 +139,7 @@ def remove_fish(recipe):
 				step["text"] = step["text"].replace(fish, replacement[fish])
 	return recipe
 
+#replaces all meats with fish
 def add_fish(recipe):
 	found_meat = []
 	replacement = {}
@@ -147,26 +155,75 @@ def add_fish(recipe):
 				step["text"] = step["text"].replace(meat, replacement[meat])
 	return recipe
 
+#Convert to mediterranean cuisine
 def to_Mediterranean(recipe):
 	new_rec = add_fish(recipe)
 	found_veg = []
+	found_bread = [] 
 	replacement = {}
+	replacement_bread = {}
+	pitacount = 0
+	bread_replacement = 'pita bread' 
+	#add ingredients we know for sure we will ba dding
+	new_rec['ingredients'].append({
+  		"name": "olive oil",
+		"quantity": 0.25,
+		"measurement": "teaspoons",
+		"descriptor": "extra virgin",
+		"preparation": "none",
+		"prep-description": "none"
+		})
+	new_rec['ingredients'].append({
+  		"name": "feta cheese",
+		"quantity": 0.25,
+		"measurement": "pounds",
+		"descriptor": "none",
+		"preparation": "crumbled",
+		"prep-description": "none"
+		})
+	new_rec['ingredients'].append({
+  		"name": "hummus",
+		"quantity": 0.25,
+		"measurement": "pounds",
+		"descriptor": "none",
+		"preparation": "none",
+		"prep-description": "none"
+		})
 	for single_ingredient in new_rec['ingredients']:
 		if single_ingredient["name"] in vegetables:
 			veg_replacement = random.choice(fruits) # TODO: we can be smarter than random
 			found_veg.append(single_ingredient["name"])
 			replacement[single_ingredient["name"]] = veg_replacement
 			single_ingredient["name"] = veg_replacement
+		if single_ingredient["name"] in breads:
+			if pitacount <= 3:
+				found_bread.append(single_ingredient["name"])
+				replacement_bread[single_ingredient["name"]] = bread_replacement
+				single_ingredient["name"] = bread_replacement
+				pitacount += 1
 	for veg in found_veg:
 		for step in new_rec["steps"]:
 			if veg in step["text"]:
 				step["text"] = step["text"].replace(veg, replacement[veg])
+	for bread in found_bread:
+		for step in new_rec["steps"]:
+			if bread in step["text"]:
+				step["text"] = step["text"].replace(bread, replacement_bread[bread])
 	new_rec['steps'].append({
-			"text": "drizzle olive oil over finished product, serve with feta cheese on the side",
+			"text": "drizzle olive oil and crumbled feta cheese over finished product, serve with hummus",
 			#Optional
-			"ingredients": ['olive oil', 'feta cheese'],
+			"ingredients": ['olive oil', 'feta cheese', 'hummus'],
 			"tools": [],
 			"methods": ["drizzle"],
+			"times": 1.0
+		})
+	if pitacount == 0:
+		new_rec['steps'].append({
+			"text": "Cut pita bread into little triangles and serve on the side in a plate",
+			#Optional
+			"ingredients": ['pita bread'],
+			"tools": [],
+			"methods": ["cut"],
 			"times": 1.0
 		})
 
