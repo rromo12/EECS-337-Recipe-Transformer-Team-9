@@ -7,6 +7,9 @@ import random
 #given a recipe dictionary of lists of dictionaries / lists -> transform to new object of same format
 
 # #Sample Recipe Representation 
+# Sources Used:
+# http://naturalhealthtechniques.com/
+# https://www.nhlbi.nih.gov/health/educational/lose_wt/eat/shop_lcal_fat.htm
 
 test_rec = { "name": "Testing Recipe",
   "ingredients": [  
@@ -276,20 +279,20 @@ def displayRecipe(recipe):
 	print "Name: " + recipe['name']
 	print "Ingredients: "
 	for single_ingredient in recipe['ingredients']:
-		print single_ingredient['name']
-		print str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
-		print single_ingredient['descriptor']
-		print single_ingredient['preparation'] + ' prep-description: ' + single_ingredient['prep-description']
+		print ' ' + single_ingredient['name']
+		print '  ' + str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
+		print '  ' + single_ingredient['descriptor']
+		print '  ' + single_ingredient['preparation'] + ' prep-description: ' + single_ingredient['prep-description']
 	print "Primary Cooking Method: " + recipe['primary cooking method']
 	print "Cooking Methods: "
 	for single_method in recipe['cooking methods']:
-		print single_method
+		print ' ' + single_method
 	print "Cooking Tools: "
 	for single_tool in recipe['cooking tools']:
-		print single_tool
+		print ' ' + single_tool
 	print "Steps: "
 	for single_step in recipe['steps']:
-		print single_step['text']
+		print ' ' + single_step['text']
 		#print 'Ingredients: '
 		#for single_ingredient in single_step['ingredients']:
 		#	print single_ingredient
