@@ -1,4 +1,5 @@
 descriptorlist = [
+		"dried",
 		"fresh",
 		"extra-virgin",
 		"granny smith",

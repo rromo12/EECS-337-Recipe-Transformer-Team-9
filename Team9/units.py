@@ -24,7 +24,7 @@ unitslist = ["tsp",
          "teaspoon",
          "teaspoons",
          "tablespoon",
-         "tablespoons"
+         "tablespoons",
          "fluid ounce",
          "fluid ounces",
          "cup",
@@ -43,8 +43,10 @@ unitslist = ["tsp",
          "pounds",
          "liters",
          #odd cases
-         "a pinch",
-         "a dash",
+         "needed",
+         "taste",
+         "pinch",
+         "dash",
          "pkg.",
          "package",
          "can",
@@ -72,6 +74,11 @@ abbreviations = {
          "qts": "quarts",
          "gals": "gallons",
          "lbs": "pounds",
+         # Odd cases
+         "taste" : "to taste",
+         "needed": "as needed",
+         "pinch": "a pinch",
+         "dash": "a dash"
 }
 
 def abbrToFull(token):
