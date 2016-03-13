@@ -132,7 +132,7 @@ def parser(url):
 		step_ingredients = []
 		step_tools =[]
 		step_methods = []
-		step_times = []
+		step_time = ""
 		step_text = step.get_text()
 		if(step_text ==""):
 			continue
@@ -164,7 +164,8 @@ def parser(url):
 		#add this steps tools to list of tools for recipe
 		step_tools = list(set(step_tools))
 		cookingTools.extend(step_tools)
-		# TODO Parse Times 
+		
+		#Parse Times 
 		# regexp for times ((([0-9]+)\s?(([.\-/0-9to ]+)?))\s(min(?:(?:utes?)?|.?)?|sec(?:(?:onds?)?|.?)?|h(?:(?:ours?|rs?.?)?)))
 		# test cases 
 		# 20, 20-30, 20 to 30 20.5 1/2
@@ -172,18 +173,24 @@ def parser(url):
 		# add a list of words to check for e.g. overnight
 		# 
 		# 
-		step_times = [""]
+		times=re.search("((([0-9]+)\s?(([.\-/0-9to ]+)?))\s(min(?:(?:utes?)?|.?)?|sec(?:(?:onds?)?|.?)?|h(?:(?:ours?|rs?.?)?)))",step_text)
+		if (times != None):
+			step_time = times.group(0).strip()
+		elif("overnight" in step_tokens):
+			step_time = "overnight"
+		else:
+			step_time = ""
 		stepdict = {
 			"text": step_text,
 			#Optional
 			"ingredients": step_ingredients,
 			"tools": step_tools,
 			"methods":step_methods,
-			"times": step_times
+			"times": step_time
 		}
 		steps.append(stepdict)
 
-	# TODO Cooking Methods (Primary and additional)
+	#Cooking Methods (Primary and additional)
 	#primary will be the most commonly referenced primary method
 	primaryCookingMethod = Counter(primaryCookingMethod).most_common(1)[0][0]
 	#clear out any duplicate methods
