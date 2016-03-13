@@ -76,9 +76,7 @@ abbreviations = {
          "lbs": "pounds",
          # Odd cases
          "taste" : "to taste",
-         "needed": "as needed",
-         "pinch": "a pinch",
-         "dash": "a dash"
+         "needed": "as needed"
 }
 
 def abbrToFull(token):

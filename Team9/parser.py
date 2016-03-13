@@ -23,7 +23,7 @@ def parser(url):
 	# recipe name class = recipe-summary__h1
 	name = soup.find_all(class_="recipe-summary__h1")
 	name = name[0].get_text()
-	stoplist = [",","!","?","(",")","of","or","more","less", "as","needed","to","such", "Frank", "'s", "\xae","taste","RedHot", "RedHot"+"\xae"]
+	stoplist = [",","!","?","(",")","of","or","more","less", "as","needed","to","such", "Frank", "'s", "\xae","taste","RedHot", "RedHot\\xae"]
 	
 	# Ingredients under class recipe-ingred_txt added
 	all_ingredients = soup.find_all(class_ = "recipe-ingred_txt", itemprop="ingredients")
@@ -36,7 +36,7 @@ def parser(url):
 		descriptors = []
 		preparations =[]
 		prep_descriptions = []
-		text =  single_ingredient.get_text()
+		text =  single_ingredient.get_text().encode('ascii','backslashreplace')
 		tokens= nltk.word_tokenize(text)
 
 		#TODO Get Ingredient Name
@@ -55,7 +55,11 @@ def parser(url):
 				quantitytoken = quantity
 				used_tokens.append(quantitytoken)
 			quantity = float(sum(Fraction(s) for s in quantity.split()))
-			quantity= Decimal(quantity).quantize(Decimal('.00'))
+			if("/" in quantitytoken):
+				print quantitytoken
+				quantity= round(quantity,2)
+			else:
+				quantity = Decimal(quantity)
 			
 		else:
 			quantity = 1
@@ -202,7 +206,7 @@ if __name__ == '__main__':
 	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
 	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 	url = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
-	parser(url)
+	#parser(url)
 
 # #Sample Recipe Representation 
 # { "name": "Recipe Name",
