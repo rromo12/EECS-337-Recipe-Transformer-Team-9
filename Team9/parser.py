@@ -6,11 +6,12 @@ import sys
 import re
 from fractions import Fraction
 from collections import Counter
+from decimal import *
 # Import units list
-from units import *
-from methods import *
-from tools import *
-
+from units import unitslist, abbreviations, abbrToFull
+from methods import methodslist, primary_methods
+from tools import methodToTools, toolslist, method2tool
+from optionallists import descriptorlist, preparationlist, prep_descriptionlist
 
 def parser(url):
 	"""Take url and parse into proper format"""
@@ -18,56 +19,109 @@ def parser(url):
 	data = r.text
 	soup = BeautifulSoup(data,"html.parser")
 	ingredients =[]
+	recipe_ingredients=[]
 	steps = []
 	# recipe name class = recipe-summary__h1
 	name = soup.find_all(class_="recipe-summary__h1")
 	name = name[0].get_text()
-	
+	stoplist = [",","!","?","(",")","of","or","more","less", "as","needed","to","such", "Frank", "'s", "\xae","taste","RedHot", "RedHot\\xae"]
 	
 	# Ingredients under class recipe-ingred_txt added
 	all_ingredients = soup.find_all(class_ = "recipe-ingred_txt", itemprop="ingredients")
+	
 	for single_ingredient in all_ingredients:
-		text =  single_ingredient.get_text()
+		used_tokens = []
+		ingredientname =""
+		quantity = 0;
+		measurement = None
+		descriptors = []
+		preparations =[]
+		prep_descriptions = []
+		text =  single_ingredient.get_text().encode('ascii','backslashreplace')
 		tokens= nltk.word_tokenize(text)
 
 		#TODO Get Ingredient Name
-		ingredientname =""
+		
+
 		#######################
 		#Quantity             # #######################
 		# TODO maybe handle weird cases such as 2 (8 ounce) cans
 		quantity= re.search("(-?([0-9]+)\s?(([./0-9]+)?))",text)
-		quantity = quantity.group(0)
-		quantity = float(sum(Fraction(s) for s in quantity.split()))
+		if(quantity != None):
+			quantity = quantity.group(0).strip()
+			if (" " in quantity):
+				 quantitytoken = quantity.split(" ")
+				 used_tokens.extend(quantitytoken)
+			else:
+				quantitytoken = quantity
+				used_tokens.append(quantitytoken)
+			quantity = float(sum(Fraction(s) for s in quantity.split()))
+			if("/" in quantitytoken):
+				quantity= round(quantity,2)
+			else:
+				quantity = Decimal(quantity)
+			
+		else:
+			quantity = 1
 
+
+			
 		
 		#######################
 		#Measurement          #
 		#######################
-		measurement = None
 		for token in tokens:
-			if(token.lower() in unitslist):
+			if(token.lower() in unitslist and measurement == None):
 				measurement= token.lower() #check vs hardcoded list of units
+				used_tokens.append(token)
+			if(token.lower() in descriptorlist):
+				#TODO Optional Parsings make list for each
+				descriptors.append(token.lower())
+				used_tokens.append(token)
+			if(token.lower() in preparationlist):
+				preparations.append(token.lower())
+				used_tokens.append(token)
+			if(token.lower() in prep_descriptionlist):
+				prep_descriptions.append(token.lower())
+				used_tokens.append(token)
+
 		#go from abbreviations to full name
 		measurement = abbrToFull(measurement);
-		
-		#TODO Optional Parsings make list for each
-		descriptor = ""
-		preparation = ""
-		prep_description = ""
+		#######################
+		#Name                 #
+		#######################
+		# Whatever was not identified as  something and is not punctuation or stoplist words
+		for token in used_tokens:
+			if(token in tokens):
+				tokens.remove(token)
+		for token in stoplist:
+			if(token in tokens):
+				tokens.remove(token)
+		name = " ".join(tokens).strip()
+		if measurement == None:
+			measurement ="units"
+
+		if len(descriptors) !=0:
+			descriptors = descriptors[0]
+		if len(preparations) !=0:
+			preparations = preparations[0]
+		if len(prep_descriptions) !=0:
+			prep_descriptions = prep_descriptions[0]
+
+		#create list of ingredients for use when finding ingredients in steps
+		recipe_ingredients.append(tokens[0])
 
 		ingredient = {
 		# "name": ingredientname,
-		"name": text,
+		"name": name,
 		"quantity": quantity,
 		"measurement": measurement,
-		"descriptor": descriptor,
-		"preparation": preparation,
-		"prep-description": prep_description
+		"descriptor": descriptors,
+		"preparation": preparations,
+		"prep-description": prep_descriptions
 		}
 		ingredients.append(ingredient)
 
-	# for ingredient in ingredients:
-	#  	print ingredient
 
 	# Steps class "step" -> class "recipe=directions__list--item"
 	primaryCookingMethod =[]
@@ -80,10 +134,10 @@ def parser(url):
 		step_methods = []
 		step_times = []
 		step_text = step.get_text()
+		if(step_text ==""):
+			continue
 		step_tokens = nltk.word_tokenize(step_text)
 		
-		# TODO Parse ingredients from step into list
-		step_ingredients = [""]
 		
 		
 		for token in step_tokens:
@@ -95,6 +149,9 @@ def parser(url):
 				step_methods.append(token.lower())
 			if(token.lower() in primary_methods):
 				primaryCookingMethod.append(token.lower())
+			# TODO Parse ingredients from step into list (not the best method currently)
+			if(token.lower() in recipe_ingredients):
+				step_ingredients.append(token.lower())
 
 		#If a method is asspcoated with a tool add this tool to the tool list
 		for method in step_methods:
@@ -102,13 +159,20 @@ def parser(url):
 				step_tools.append(method2tool(method).lower())
 
 		#add this steps methods to list of methods for recipe
+		step_methods = list(set(step_methods))
 		cookingMethods.extend(step_methods)
 		#add this steps tools to list of tools for recipe
+		step_tools = list(set(step_tools))
 		cookingTools.extend(step_tools)
 		# TODO Parse Times 
+		# regexp for times ((([0-9]+)\s?(([.\-/0-9to ]+)?))\s(min(?:(?:utes?)?|.?)?|sec(?:(?:onds?)?|.?)?|h(?:(?:ours?|rs?.?)?)))
+		# test cases 
+		# 20, 20-30, 20 to 30 20.5 1/2
+		#minutes/seconds/hours/min./min/sec./sec/hr/hrs
+		# add a list of words to check for e.g. overnight
+		# 
+		# 
 		step_times = [""]
-
-
 		stepdict = {
 			"text": step_text,
 			#Optional
@@ -117,19 +181,15 @@ def parser(url):
 			"methods":step_methods,
 			"times": step_times
 		}
-		print stepdict
 		steps.append(stepdict)
 
 	# TODO Cooking Methods (Primary and additional)
 	#primary will be the most commonly referenced primary method
 	primaryCookingMethod = Counter(primaryCookingMethod).most_common(1)[0][0]
-	print primaryCookingMethod
 	#clear out any duplicate methods
 	cookingMethods = list(set(cookingMethods))
 	#Clear out any duplicate tools
 	cookingTools = list(set(cookingTools))
-	print cookingTools
-	print cookingMethods
 	return {"name": name,
 			"ingredients": ingredients,
 			"primary cooking method": primaryCookingMethod,
@@ -143,10 +203,10 @@ if __name__ == '__main__':
 	# url ="http://allrecipes.com/recipe/16066"
 
 	###AutoGrader Recipes
-	# url  = "http://allrecipes.com/recipe/easy-meatloaf/"
+	url  = "http://allrecipes.com/recipe/easy-meatloaf/"
 	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
-	# http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/
-	# http://allrecipes.com/recipe/213742/meatball-nirvana/
+	url = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
+	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 	parser(url)
 
 # #Sample Recipe Representation 
