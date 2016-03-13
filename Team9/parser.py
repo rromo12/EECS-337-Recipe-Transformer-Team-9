@@ -19,6 +19,7 @@ def parser(url):
 	data = r.text
 	soup = BeautifulSoup(data,"html.parser")
 	ingredients =[]
+	recipe_ingredients=[]
 	steps = []
 	# recipe name class = recipe-summary__h1
 	name = soup.find_all(class_="recipe-summary__h1")
@@ -56,7 +57,6 @@ def parser(url):
 				used_tokens.append(quantitytoken)
 			quantity = float(sum(Fraction(s) for s in quantity.split()))
 			if("/" in quantitytoken):
-				print quantitytoken
 				quantity= round(quantity,2)
 			else:
 				quantity = Decimal(quantity)
@@ -108,6 +108,9 @@ def parser(url):
 		if len(prep_descriptions) !=0:
 			prep_descriptions = prep_descriptions[0]
 
+		#create list of ingredients for use when finding ingredients in steps
+		recipe_ingredients.append(tokens[0])
+
 		ingredient = {
 		# "name": ingredientname,
 		"name": name,
@@ -117,11 +120,8 @@ def parser(url):
 		"preparation": preparations,
 		"prep-description": prep_descriptions
 		}
-		print ingredient
 		ingredients.append(ingredient)
 
-	# for ingredient in ingredients:
-	#  	print ingredient
 
 	# Steps class "step" -> class "recipe=directions__list--item"
 	primaryCookingMethod =[]
@@ -138,8 +138,6 @@ def parser(url):
 			continue
 		step_tokens = nltk.word_tokenize(step_text)
 		
-		# TODO Parse ingredients from step into list
-		step_ingredients = [""]
 		
 		
 		for token in step_tokens:
@@ -151,6 +149,9 @@ def parser(url):
 				step_methods.append(token.lower())
 			if(token.lower() in primary_methods):
 				primaryCookingMethod.append(token.lower())
+			# TODO Parse ingredients from step into list (not the best method currently)
+			if(token.lower() in recipe_ingredients):
+				step_ingredients.append(token.lower())
 
 		#If a method is asspcoated with a tool add this tool to the tool list
 		for method in step_methods:
@@ -165,8 +166,6 @@ def parser(url):
 		cookingTools.extend(step_tools)
 		# TODO Parse Times 
 		step_times = [""]
-
-
 		stepdict = {
 			"text": step_text,
 			#Optional
@@ -175,20 +174,15 @@ def parser(url):
 			"methods":step_methods,
 			"times": step_times
 		}
-		# print stepdict
-		# print "\n"
 		steps.append(stepdict)
 
 	# TODO Cooking Methods (Primary and additional)
 	#primary will be the most commonly referenced primary method
 	primaryCookingMethod = Counter(primaryCookingMethod).most_common(1)[0][0]
-	print primaryCookingMethod
 	#clear out any duplicate methods
 	cookingMethods = list(set(cookingMethods))
 	#Clear out any duplicate tools
 	cookingTools = list(set(cookingTools))
-	print cookingTools
-	print cookingMethods
 	return {"name": name,
 			"ingredients": ingredients,
 			"primary cooking method": primaryCookingMethod,
