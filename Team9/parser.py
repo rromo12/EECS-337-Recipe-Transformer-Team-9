@@ -165,6 +165,13 @@ def parser(url):
 		step_tools = list(set(step_tools))
 		cookingTools.extend(step_tools)
 		# TODO Parse Times 
+		# regexp for times ((([0-9]+)\s?(([.\-/0-9to ]+)?))\s(min(?:(?:utes?)?|.?)?|sec(?:(?:onds?)?|.?)?|h(?:(?:ours?|rs?.?)?)))
+		# test cases 
+		# 20, 20-30, 20 to 30 20.5 1/2
+		#minutes/seconds/hours/min./min/sec./sec/hr/hrs
+		# add a list of words to check for e.g. overnight
+		# 
+		# 
 		step_times = [""]
 		stepdict = {
 			"text": step_text,
@@ -198,7 +205,6 @@ if __name__ == '__main__':
 	###AutoGrader Recipes
 	url  = "http://allrecipes.com/recipe/easy-meatloaf/"
 	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
-	
 	url = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
 	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 	parser(url)
