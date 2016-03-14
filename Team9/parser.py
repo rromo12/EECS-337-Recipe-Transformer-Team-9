@@ -246,10 +246,10 @@ if __name__ == '__main__':
 
 	###AutoGrader Recipes
 	
-	url = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
+	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 	url  = "http://allrecipes.com/recipe/easy-meatloaf/"
 	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
-	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
+	url = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
 	parser(url)
 
 # #Sample Recipe Representation 

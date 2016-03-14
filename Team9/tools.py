@@ -53,8 +53,6 @@ methodToTools = {
 	"glaze": "pastry brush",
 	"glazed": "pastry brush",
 	"glazing": "pastry brush",
-	"juice": "juicer",
-	"juicing": "juicer",
 	"stir":"wooden spoon",
 	"stirred":"wooden spoon",
 	"stirring":"wooden spoon",
