@@ -114,7 +114,6 @@ def parser(url):
 
 		#create list of ingredients for use when finding ingredients in steps
 		recipe_ingredients.append(tokens[0])
-
 		ingredient = {
 		# "name": ingredientname,
 		"name": name,
@@ -126,8 +125,10 @@ def parser(url):
 		}
 		ingredients.append(ingredient)
 
-
+	recipe_ingreidients = list(set(recipe_ingredients))
 	# Steps class "step" -> class "recipe=directions__list--item"
+	print recipe_ingreidients
+	print ingredients
 	primaryCookingMethod =[]
 	cookingMethods = []
 	cookingTools = []
@@ -160,7 +161,14 @@ def parser(url):
 				primaryCookingMethod.append(token.lower())
 			# TODO Parse ingredients from step into list (not the best method currently)
 			if(token.lower() in recipe_ingredients):
-				step_ingredients.append(token.lower())
+				# Check all ingredients
+				for ingredient in ingredients:
+					# if first word matches then add this to step ingredients
+					if(token.lower() == ingredient["name"].split()[0]):
+						step_ingredients.append(ingredient["name"])
+					else:
+						 step_ingredients.append(token.lower())
+
 
 		# Bigrams
 		for token in step_bigram_tokens:
@@ -172,9 +180,6 @@ def parser(url):
 				step_methods.append(token.lower())
 			if(token.lower() in primary_methods):
 				primaryCookingMethod.append(token.lower())
-			# TODO Parse ingredients from step into list (not the best method currently)
-			if(token.lower() in recipe_ingredients):
-				step_ingredients.append(token.lower())
 
 
 
@@ -189,6 +194,7 @@ def parser(url):
 		cookingMethods.extend(step_methods)
 		#add this steps tools to list of tools for recipe
 		step_tools = list(set(step_tools))
+		step_ingredients = list(set(step_ingredients))
 		cookingTools.extend(step_tools)
 		
 		#Parse Times 
@@ -214,6 +220,9 @@ def parser(url):
 			"methods":step_methods,
 			"times": step_time
 		}
+		for keys,values in stepdict.items():
+			print(keys)
+			print(values)
 		steps.append(stepdict)
 
 	#Cooking Methods (Primary and additional)
@@ -221,7 +230,6 @@ def parser(url):
 	primaryCookingMethod = Counter(primaryCookingMethod).most_common(1)[0][0]
 	#clear out any duplicate methods
 	cookingMethods = list(set(cookingMethods))
-	print cookingMethods
 	#Clear out any duplicate tools
 	cookingTools = list(set(cookingTools))
 	return {"name": name,
