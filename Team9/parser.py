@@ -22,6 +22,9 @@ def parser(url):
 	ingredients =[]
 	recipe_ingredients=[]
 	steps = []
+	primaryCookingMethod =[]
+	cookingMethods = []
+	cookingTools = []
 	# recipe name class = recipe-summary__h1
 	name = soup.find_all(class_="recipe-summary__h1")
 	name = name[0].get_text()
@@ -90,7 +93,7 @@ def parser(url):
 
 		#go from abbreviations to full name
 		measurement = abbrToFull(measurement);
-
+		
 		#######################
 		#Name                 #
 		#######################
@@ -109,6 +112,9 @@ def parser(url):
 			descriptors = descriptors[0]
 		if len(preparations) !=0:
 			preparations = preparations[0]
+			# Add any tools required for preparation
+			if(method2tool(preparations)!= None):
+				cookingTools.append(method2tool(preparations).lower())
 		if len(prep_descriptions) !=0:
 			prep_descriptions = prep_descriptions[0]
 
@@ -127,11 +133,7 @@ def parser(url):
 
 	recipe_ingreidients = list(set(recipe_ingredients))
 	# Steps class "step" -> class "recipe=directions__list--item"
-	print recipe_ingreidients
-	print ingredients
-	primaryCookingMethod =[]
-	cookingMethods = []
-	cookingTools = []
+
 	allsteps = soup.find_all(class_="recipe-directions__list--item")
 	for step in allsteps:
 		step_ingredients = []
@@ -220,9 +222,6 @@ def parser(url):
 			"methods":step_methods,
 			"times": step_time
 		}
-		for keys,values in stepdict.items():
-			print(keys)
-			print(values)
 		steps.append(stepdict)
 
 	#Cooking Methods (Primary and additional)
@@ -232,6 +231,7 @@ def parser(url):
 	cookingMethods = list(set(cookingMethods))
 	#Clear out any duplicate tools
 	cookingTools = list(set(cookingTools))
+	print cookingTools
 	return {"name": name,
 			"ingredients": ingredients,
 			"primary cooking method": primaryCookingMethod,
