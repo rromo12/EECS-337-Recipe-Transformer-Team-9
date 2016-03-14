@@ -29,7 +29,7 @@ def parser(url):
 	
 	# Ingredients under class recipe-ingred_txt added
 	all_ingredients = soup.find_all(class_ = "recipe-ingred_txt", itemprop="ingredients")
-	
+	st = LancasterStemmer()
 	for single_ingredient in all_ingredients:
 		ingredientname =""
 		quantity = 0;
@@ -154,6 +154,8 @@ def parser(url):
 			# Get Methods and Primary Methods	
 			if(token.lower() in methodslist):
 				step_methods.append(token.lower())
+			elif(st.stem(token.lower()) in methodslist):
+				step_methods.append(token.lower())
 			if(token.lower() in primary_methods):
 				primaryCookingMethod.append(token.lower())
 			# TODO Parse ingredients from step into list (not the best method currently)
@@ -222,7 +224,6 @@ def parser(url):
 	print cookingMethods
 	#Clear out any duplicate tools
 	cookingTools = list(set(cookingTools))
-	print cookingTools
 	return {"name": name,
 			"ingredients": ingredients,
 			"primary cooking method": primaryCookingMethod,
@@ -236,10 +237,11 @@ if __name__ == '__main__':
 	# url ="http://allrecipes.com/recipe/16066"
 
 	###AutoGrader Recipes
-	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
+	
 	url = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
-	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 	url  = "http://allrecipes.com/recipe/easy-meatloaf/"
+	url = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
+	url = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 	parser(url)
 
 # #Sample Recipe Representation 
