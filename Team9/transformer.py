@@ -3,6 +3,7 @@ import requests
 import sys
 import nltk
 import random
+from carbsubs import *
 
 #given a recipe dictionary of lists of dictionaries / lists -> transform to new object of same format
 
@@ -14,7 +15,7 @@ import random
 test_rec = { "name": "Testing Recipe",
   "ingredients": [  
   		{
-  		"name": "corn bread",
+  		"name": "wheat bread",
 		"quantity": 0.25,
 		"measurement": "pounds",
 		"descriptor": "descriptor",
@@ -30,7 +31,7 @@ test_rec = { "name": "Testing Recipe",
 		"prep-description": "coarsely"
 		},
 		{
-  		"name": "muenster cheese",
+  		"name": "chicken",
 		"quantity": 0.25,
 		"measurement": "pounds",
 		"descriptor": "descriptor",
@@ -42,9 +43,9 @@ test_rec = { "name": "Testing Recipe",
 	"cooking tools": ["pan","pot","spatula"],
 	"steps": [
 		{
-			"text": "place corn bread and beef in pot and spread along sides with spatula",
+			"text": "place bread, chicken and beef in pot and spread along sides with spatula",
 			#Optional
-			"ingredients": ["corn bread", "beef"],
+			"ingredients": ["corn bread", "beef", 'chicken'],
 			"tools": ["pot","spatula"],
 			"methods": ["stir","spread"],
 			"times": 5.0
@@ -74,6 +75,7 @@ fishes = []
 fruits = []
 breads = []
 cheeses = []
+allmeat = []
 
 #load txt files into python list objects
 def load_lists():
@@ -115,12 +117,17 @@ def load_lists():
 		curr = dairy.rstrip('\n')
 		cheeses.append(str(curr.lower()))
 
-#replaces all vegetables with meat
+	for meat in meats:
+		allmeat.append(meat)
+	for pol in poultrys:
+		allmeat.append(pol)
+
+#replaces all meat with vegetables
 def remove_meat(recipe):
 	found_meat = []
 	replacement = {}
 	for single_ingredient in recipe['ingredients']:
-		if single_ingredient["name"] in meats:
+		if single_ingredient["name"] in allmeat:
 			meat_replacement = random.choice(vegetables) # TODO: we can be smarter than random
 			found_meat.append(single_ingredient["name"])
 			replacement[single_ingredient["name"]] = meat_replacement
@@ -137,7 +144,7 @@ def add_meat(recipe):
 	replacement = {}
 	for single_ingredient in recipe['ingredients']:
 		if single_ingredient["name"] in vegetables:
-			veg_replacement = random.choice(meats) # TODO: we can be smarter than random
+			veg_replacement = random.choice(allmeat) # TODO: we can be smarter than random
 			found_veg.append(single_ingredient["name"])
 			replacement[single_ingredient["name"]] = veg_replacement
 			single_ingredient["name"] = veg_replacement
@@ -169,7 +176,7 @@ def add_fish(recipe):
 	found_meat = []
 	replacement = {}
 	for single_ingredient in recipe['ingredients']:
-		if single_ingredient["name"] in meats:
+		if single_ingredient["name"] in allmeat:
 			fish_replacement = random.choice(fishes) # TODO: we can be smarter than random
 			found_meat.append(single_ingredient["name"])
 			replacement[single_ingredient["name"]] = fish_replacement
@@ -273,6 +280,34 @@ def to_American(recipe):
 
 	return new_rec
 
+def to_lowCarb(recipe):
+	found_highcarbs = []
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient['name'] in carb_subs:
+			found_highcarbs.append(single_ingredient['name'])
+			single_ingredient['name'] = carb_subs[single_ingredient['name']]
+	for badcarbs in found_highcarbs:
+		for step in recipe["steps"]:
+			if badcarbs in step["text"]:
+				step["text"] = step["text"].replace(badcarbs, carb_subs[badcarbs])
+
+	return recipe
+
+def to_highCarb(recipe):
+	inv_subs = {v: k for k, v in carb_subs.items()}
+	found_lowcarbs = []
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient['name'] in inv_subs:
+			found_lowcarbs.append(single_ingredient['name'])
+			single_ingredient['name'] = inv_subs[single_ingredient['name']]
+	for goodcarb in found_lowcarbs:
+		for step in recipe["steps"]:
+			if goodcarb in step["text"]:
+				step["text"] = step["text"].replace(goodcarb, inv_subs[goodcarb])
+
+	return recipe
+
+
 #nicely displays in terminal output
 def displayRecipe(recipe):
 	print '____________________________________________________________________________'
@@ -307,7 +342,8 @@ def displayRecipe(recipe):
 
 
 load_lists()
-displayRecipe(to_American(test_rec))
+displayRecipe(to_highCarb(test_rec))
+#displayRecipe(to_lowCarb(test_rec))
 
 
 
