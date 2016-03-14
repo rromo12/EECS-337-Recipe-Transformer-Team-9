@@ -87,7 +87,6 @@ descriptorlist = [
 		"loquat",
 		"millet",
 		"golden",
-		"flakes",
 		"hoagie",
 		"sherry",
 		"leaves",
