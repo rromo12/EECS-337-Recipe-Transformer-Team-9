@@ -331,6 +331,20 @@ def to_lowFat(recipe):
 
 	return recipe
 
+def to_highFat(recipe):
+	inv_subs = {v: k for k, v in fat_subs.items()}
+	found_lowfats = []
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient['name'] in inv_subs:
+			found_lowfats.append(single_ingredient['name'])
+			single_ingredient['name'] = inv_subs[single_ingredient['name']]
+	for goodfats in found_lowfats:
+		for step in recipe["steps"]:
+			if goodfats in step["text"]:
+				step["text"] = step["text"].replace(goodfats, inv_subs[goodfats])
+
+	return recipe
+
 
 #nicely displays in terminal output
 def displayRecipe(recipe):
@@ -439,8 +453,40 @@ def main():
 		else:
 			print "Please enter 1 or 2..."
 
+		print "Here is the original, parsed: "
 		orig_rec = parser(user_url)
 		displayRecipe_preparse(orig_rec)
+
+		print "Press 1 to make vegetarian, 2 to make non-veg"
+		print "Press 3 to make pescatarian, 4 to make non-pescatarian"
+		print "Press 5 to make cuisine mediterranean"
+		print "Press 6 to make cuisine american"
+		print "Press 7 to make low-carb, 8 to make high-carb"
+		print "Press 9 to make low-fat, 8 to make high-fat"
+		usr_transform = input()
+		if usr_transform == 1:
+			displayRecipe(remove_meat(orig_rec))
+		elif usr_transform == 2:
+			displayRecipe(add_meat(orig_rec))
+		elif usr_transform == 3:
+			displayRecipe(add_fish(orig_rec))
+		elif usr_transform == 4:
+			displayRecipe(remove_fish(orig_rec))
+		elif usr_transform == 5:
+			displayRecipe(to_Mediterranean(orig_rec))
+		elif usr_transform == 6:
+			displayRecipe(to_American(orig_rec))
+		elif usr_transform == 7:
+			displayRecipe(to_lowCarb(orig_rec))
+		elif usr_transform == 8:
+			displayRecipe(to_highCarb(orig_rec))
+		elif usr_transform == 9:
+			displayRecipe(to_lowFat(orig_rec))
+		elif usr_transform == 0:
+			displayRecipe(to_highFat)
+
+		else:
+			print "Please enter a valid choice..."
 
 	return
 

@@ -30,5 +30,7 @@ fat_subs = {
 	'tacos':'lettuce wraps',
 	'bruschetta toast':'roasted eggplant bread',
 	'chickpeas':'soy beans',
+	'milk':'low-fat milk',
+	'whole milk': "milk",
 
 }
