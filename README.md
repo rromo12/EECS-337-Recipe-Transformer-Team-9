@@ -16,21 +16,21 @@ Natural Language ToolKit(NLTK)
     python transformer.py
 ## Parser 
 Parses the recipe at the url into the following structure which we then perform transformations on:
-* #### Ingredients:
-    *  Name
-    *  Quantity
-    *  Measurement
-    *  Descriptor
-    *  Preparation
-    *  Preparation Descriptors
-* #### Steps
-    * Step Ingredients
-    * Step Tools
-    * Step Methods
-    * Step Times
-* #### Primary Cooking Method
-* #### Cooking Methods
-* #### Cooking Tools
+#### Ingredients:
+      Name
+      Quantity
+      Measurement
+      Descriptor
+      Preparation
+      Preparation Descriptors
+ #### Steps
+     Step Ingredients
+     Step Tools
+     Step Methods
+     Step Times
+ #### Primary Cooking Method
+ #### Cooking Methods
+ #### Cooking Tools
 
 ## Current Transformations
 * To/From Vegetarian
