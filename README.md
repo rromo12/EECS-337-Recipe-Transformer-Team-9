@@ -11,7 +11,7 @@ Natural Language ToolKit(NLTK)
 
     http://www.nltk.org/install.html
 
-## Running the Recipe Transformer
+## Running the Recipe Transformer(must be done from within Team9 directory)
 
     python transformer.py
 ## Parser 
