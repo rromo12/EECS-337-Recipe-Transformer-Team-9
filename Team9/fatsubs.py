@@ -1,11 +1,17 @@
-carb_subs = {
-	'bread':'wheat bread',
-	'white bread':'wheat bread',
-	'milk':'soy milk',
-	'whole milk':'soy milk',
-	'potatoes':'squash',
-	'sweet potatoes':'squash',
-	'cheese':'cottage cheese',
+fat_subs = {
+	'salted':'unsalted',
+	'beef':'lean beef',
+	'bread':'whole wheat bread',
+	'white bread':'low-fat white bread',
+	'chicken':'lean skinned chicken',
+	'bacon':'canadian bacon',
+	'fudge':'low-fat syrup',
+	'ground beef':'ground turkey',
+	'sour cream':'yogurt',
+	'potato':'squash',
+	'cheese':'low-fat cheese',
+	'cheddar cheese':'low-fat cheddar cheese',
+	'mozzarella cheese':'low-fat mozzarella cheese',
 	'pasta':'whole what pasta',
 	'bun':'lettuce wrap bun',
 	'french fries':'squash fries',
@@ -24,5 +30,5 @@ carb_subs = {
 	'tacos':'lettuce wraps',
 	'bruschetta toast':'roasted eggplant bread',
 	'chickpeas':'soy beans',
-	'bisquik':'carbquik',
+
 }

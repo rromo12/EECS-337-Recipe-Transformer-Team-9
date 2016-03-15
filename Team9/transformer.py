@@ -4,6 +4,8 @@ import sys
 import nltk
 import random
 from carbsubs import *
+from fatsubs import *
+from parser import *
 
 #given a recipe dictionary of lists of dictionaries / lists -> transform to new object of same format
 
@@ -43,9 +45,9 @@ test_rec = { "name": "Testing Recipe",
 	"cooking tools": ["pan","pot","spatula"],
 	"steps": [
 		{
-			"text": "place bread, chicken and beef in pot and spread along sides with spatula",
+			"text": "place wheat bread, chicken and beef in pot and spread along sides with spatula",
 			#Optional
-			"ingredients": ["corn bread", "beef", 'chicken'],
+			"ingredients": ["wheat bread", "beef", 'chicken'],
 			"tools": ["pot","spatula"],
 			"methods": ["stir","spread"],
 			"times": 5.0
@@ -258,6 +260,14 @@ def to_Mediterranean(recipe):
 			"methods": ["cut"],
 			"times": 1.0
 		})
+		new_rec['ingredients'].append({
+  		"name": "pita bread",
+		"quantity": 0.25,
+		"measurement": "pounds",
+		"descriptor": "none",
+		"preparation": "none",
+		"prep-description": "none"
+		})
 
 	return new_rec
 
@@ -307,6 +317,19 @@ def to_highCarb(recipe):
 
 	return recipe
 
+def to_lowFat(recipe):
+	found_highfats = []
+	for single_ingredient in recipe['ingredients']:
+		if single_ingredient['name'] in fat_subs:
+			found_highfats.append(single_ingredient['name'])
+			single_ingredient['name'] = fat_subs[single_ingredient['name']]
+	for badfats in found_highfats:
+		for step in recipe["steps"]:
+			if badfats in step["text"]:
+				step["text"] = step["text"].replace(badfats, fat_subs[badfats])
+
+	return recipe
+
 
 #nicely displays in terminal output
 def displayRecipe(recipe):
@@ -316,8 +339,8 @@ def displayRecipe(recipe):
 	for single_ingredient in recipe['ingredients']:
 		print ' ' + single_ingredient['name']
 		print '  ' + str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
-		print '  ' + single_ingredient['descriptor']
-		print '  ' + single_ingredient['preparation'] + ' prep-description: ' + single_ingredient['prep-description']
+		#print '  ' + single_ingredient['descriptor']
+		#print '  ' + single_ingredient['preparation'] + ' prep-description: ' + single_ingredient['prep-description']
 	print "Primary Cooking Method: " + recipe['primary cooking method']
 	print "Cooking Methods: "
 	for single_method in recipe['cooking methods']:
@@ -340,9 +363,32 @@ def displayRecipe(recipe):
 		#print 'Time: ' + str(single_step['times'])
 		#print ''
 
+def main():
+	print "Main Function initiated"
+	print "Loading Lists..."
+	load_lists()
+	print "Lists Loaded..."
+	print "Fetching Recipes..."
+	url_01 = "http://allrecipes.com/recipe/213742/meatball-nirvana/"
+	url_02 = "http://allrecipes.com/recipe/easy-meatloaf/"
+	url_03 = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
+	url_04 = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 
-load_lists()
-displayRecipe(to_highCarb(test_rec))
+	rec_01 = parser(url_01)
+	print "Sample Recipe 1 Parsed!"
+	rec_01 = parser(url_01)
+	print "Sample Recipe 2 Parsed!"
+	rec_01 = parser(url_01)
+	print "Sample Recipe 3 Parsed!"
+	rec_01 = parser(url_01)
+	print "Sample Recipe 4 Parsed!"
+
+	displayRecipe(remove_meat(rec_01))
+
+
+
+if __name__ == '__main__':
+    main() 
 #displayRecipe(to_lowCarb(test_rec))
 
 
