@@ -1,5 +1,5 @@
 '''Version 0.1'''
-from parser import *
+from recipe_parser import *
 
 def autograder(url):
     '''Accepts the URL for a recipe, and returns a dictionary of the

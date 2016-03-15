@@ -5,8 +5,7 @@ import nltk
 import random
 from carbsubs import *
 from fatsubs import *
-from parser import *
-
+from recipe_parser import *
 #given a recipe dictionary of lists of dictionaries / lists -> transform to new object of same format
 
 # #Sample Recipe Representation 
