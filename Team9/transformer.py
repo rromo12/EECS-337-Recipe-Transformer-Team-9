@@ -138,6 +138,7 @@ def remove_meat(recipe):
 		for step in recipe["steps"]:
 			if meat in step["text"]:
 				step["text"] = step["text"].replace(meat, replacement[meat])
+
 	return recipe
 
 #replaces all meats with vegetables
@@ -339,8 +340,8 @@ def displayRecipe(recipe):
 	for single_ingredient in recipe['ingredients']:
 		print ' ' + single_ingredient['name']
 		print '  ' + str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
-		#print '  ' + single_ingredient['descriptor']
-		#print '  ' + single_ingredient['preparation'] + ' prep-description: ' + single_ingredient['prep-description']
+		print '  ' + str(single_ingredient['descriptor'])
+		print '  ' + str(single_ingredient['preparation']) #+ ' prep-description: ' + str(single_ingredient['prep-description'])
 	print "Primary Cooking Method: " + recipe['primary cooking method']
 	print "Cooking Methods: "
 	for single_method in recipe['cooking methods']:
@@ -363,6 +364,37 @@ def displayRecipe(recipe):
 		#print 'Time: ' + str(single_step['times'])
 		#print ''
 
+def displayRecipe_preparse(recipe):
+	print '____________________________________________________________________________'
+	print "Name: " + recipe['name']
+	print "Ingredients: "
+	for single_ingredient in recipe['ingredients']:
+		print ' ' + single_ingredient['name']
+		print '  ' + str(single_ingredient['quantity']) + ' ' + (single_ingredient['measurement'])
+		print '  ' + str(single_ingredient['descriptor'])
+		print '  ' + str(single_ingredient['preparation']) #+ ' prep-description: ' + str(single_ingredient['prep-description'])
+	print "Primary Cooking Method: " + recipe['primary cooking method']
+	print "Cooking Methods: "
+	for single_method in recipe['cooking methods']:
+		print ' ' + single_method
+	print "Cooking Tools: "
+	for single_tool in recipe['cooking tools']:
+		print ' ' + single_tool
+	print "Steps: "
+	for single_step in recipe['steps']:
+		print ' ' + single_step['text']
+		print 'Ingredients: '
+		for single_ingredient in single_step['ingredients']:
+			print single_ingredient
+		print 'Tools: '
+		for single_tool in single_step['tools']:
+			print single_tool
+		print 'Methods: '
+		for single_method in single_step['methods']:
+			print single_method
+		print 'Time: ' + str(single_step['times'])
+		print ''
+
 def main():
 	print "Main Function initiated"
 	print "Loading Lists..."
@@ -374,17 +406,43 @@ def main():
 	url_03 = "http://allrecipes.com/recipe/8714/baked-lemon-chicken-with-mushroom-sauce/"
 	url_04 = "http://allrecipes.com/recipe/80827/easy-garlic-broiled-chicken/"
 
-	rec_01 = parser(url_01)
-	print "Sample Recipe 1 Parsed!"
-	rec_01 = parser(url_01)
-	print "Sample Recipe 2 Parsed!"
-	rec_01 = parser(url_01)
-	print "Sample Recipe 3 Parsed!"
-	rec_01 = parser(url_01)
-	print "Sample Recipe 4 Parsed!"
+	#rec_01 = parser(url_01)
+	#print "Sample Recipe 1 Parsed!"
+	#rec_02 = parser(url_02)
+	#print "Sample Recipe 2 Parsed!"
+	#rec_03 = parser(url_03)
+	#print "Sample Recipe 3 Parsed!"
+	#rec_04 = parser(url_04)
+	#print "Sample Recipe 4 Parsed!"
 
-	displayRecipe(remove_meat(rec_01))
+	while True:
+		print "Press 1 to enter URL, 2 to select from loaded recipes: "
+		usr_input = input()
+		if usr_input == 1:
+			user_url = str(raw_input("enter recipe url: "))
+		elif usr_input == 2:
+			print "Press 1 to test meatball-nirvana"
+			print "Press 2 to test easy-meatloaf"
+			print "Press 3 to test baked-lemon-chicken-with-mushroom-sauce"
+			print "Press 4 to test easy-garlic-broiled-chicken"
+			usr_input = input()
+			if usr_input == 1:
+				user_url = url_01
+			elif usr_input == 2:
+				user_url = url_02
+			elif usr_input == 3:
+				user_url = url_03
+			elif usr_input == 4:
+				user_url = url_04
+			else:
+				print "Please enter 1, 2, 3, or 4"
+		else:
+			print "Please enter 1 or 2..."
 
+		orig_rec = parser(user_url)
+		displayRecipe_preparse(orig_rec)
+
+	return
 
 
 if __name__ == '__main__':
