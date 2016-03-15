@@ -1,0 +1,28 @@
+Milk, Buttermilk
+Milk, Cow-Skim or 2%
+Milk, Cow-Whole
+Milk, Goat
+Milk, Indian Buffalo
+Milk
+Buttermilk Milk
+Cow-Skim Milk
+2% Milk
+Cow-Whole Milk
+Whole Milk
+Goat Milk
+Indian Buffalo Milk
+Yogurt, Cow
+Yogurt, flavored
+Yogurt, Full fat
+Yogurt, Greek
+Yogurt, Low-Fat
+Yogurt, Sugar free
+Cow Yogurt
+Flavored Yogurt
+Yogurt
+Full Fat Yogurt
+Greek Yogurt
+Low-Fat Yogurt
+Sugar Free Yogurt
+Butter
+Ghee
